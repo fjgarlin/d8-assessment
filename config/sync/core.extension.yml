@@ -18,6 +18,7 @@ module:
   file: 0
   filter: 0
   graphql: 0
+  graphql_core: 0
   help: 0
   image: 0
   link: 0
@@ -26,6 +27,7 @@ module:
   metatag: 0
   metatag_open_graph: 0
   node: 0
+  npm: 0
   options: 0
   page_cache: 0
   path: 0
@@ -59,3 +61,5 @@ theme:
   seven: 0
   beaker: 0
   stable: 0
+_core:
+  default_config_hash: R4IF-ClDHXxblLcG0L7MgsLvfBIMAvi_skumNFQwkDc

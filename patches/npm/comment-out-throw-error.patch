@@ -1,0 +1,13 @@
+diff --git a/src/Plugin/NpmExecutablePluginManager.php b/src/Plugin/NpmExecutablePluginManager.php
+index e1a2d12d46b3..2950fddc4b88 100644
+--- a/src/Plugin/NpmExecutablePluginManager.php
++++ b/src/Plugin/NpmExecutablePluginManager.php
+@@ -67,7 +67,7 @@ class NpmExecutablePluginManager extends DefaultPluginManager {
+       }
+     }
+ 
+-    throw new NpmExecutableNotFoundException('No npm executable found.');
++    //throw new NpmExecutableNotFoundException('No npm executable found.');
+   }
+ 
+ }

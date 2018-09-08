@@ -21,6 +21,7 @@ git clone https://github.com/amazeeio/drupal-example.git drupal8-lagoon && cd $_
 3. Build and start the build images
 
 ```
+docker-compose build
 docker-compose up -d
 docker-compose exec cli composer install
 ```
