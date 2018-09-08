@@ -1,0 +1,6 @@
+app:
+  version: 1.x
+  webpack: true
+  js:
+    js/index.js: {}
+ 

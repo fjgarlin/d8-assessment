@@ -1,0 +1,7 @@
+name: 'Vue Assessment'
+type: module
+description: 'Simple module for VueJS assessment.'
+core: 8.x
+package: 'Custom'
+dependencies:
+  - webpack_vuejs

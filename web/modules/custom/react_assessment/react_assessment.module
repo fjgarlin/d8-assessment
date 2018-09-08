@@ -1,0 +1,10 @@
+<?php
+
+/**
+ * Implements hook_page_attachments_alter.
+ */
+function react_assessment_page_attachments_alter(array &$attachments) {
+  if (\Drupal::service('path.current')->getPath() === '/react') {
+    $attachments['#attached']['library'][] = 'react_assessment/app';
+  }
+}

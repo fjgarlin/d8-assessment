@@ -1,0 +1,7 @@
+name: 'React Assessment'
+type: module
+description: 'Simple module for ReactJS assessment.'
+core: 8.x
+package: 'Custom'
+dependencies:
+  - webpack_react

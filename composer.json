@@ -1,0 +1,91 @@
+{
+    "name": "amazeeio/drupal-project",
+    "description": "Project template for Drupal 8 projects with composer hosted on amazee.io",
+    "type": "project",
+    "repositories": [
+        {
+            "type":"package",
+            "package": {
+                "name": "drupal/varnish",
+                "version": "dev-amazee",
+                "type": "drupal-module",
+                "source": {
+                    "type": "git",
+                    "url": "git@github.com:AmazeeLabs/varnish.git",
+                    "reference": "8.x-1.x-amazee"
+                }
+            }
+        },
+        {
+            "type": "composer",
+            "url": "https://packages.drupal.org/8"
+        }
+    ],
+    "require": {
+        "composer/installers": "^1.0.20",
+        "cweagans/composer-patches": "~1.0",
+        "drupal-composer/drupal-scaffold": "^2.0.1",
+        "drupal/admin_toolbar": "~1.0",
+        "drupal/config_installer": "~1.0",
+        "drupal/console": "^1.0",
+        "drupal/core": "^8.5",
+        "drupal/ctools": "~3.0",
+        "drupal/devel": "~1.2",
+        "drupal/entity_reference_revisions": "~1.0",
+        "drupal/field_group": "~1.0",
+        "drupal/graphql": "^3.0@beta",
+        "drupal/layout_plugin": "~1.0",
+        "drupal/link_css": "~1.0",
+        "drupal/metatag": ">1.0-beta10",
+        "drupal/page_manager": "~1.0",
+        "drupal/paragraphs": "~1.0",
+        "drupal/pathauto": "~1.0",
+        "drupal/redirect": "~1.0",
+        "drupal/token": "~1.0",
+        "drupal/varnish": "dev-amazee",
+        "drupal/webpack": "^1.0@alpha",
+        "drupal/webpack_babel": "^1.0@alpha",
+        "drupal/webpack_react": "^1.0@alpha",
+        "drupal/webpack_vuejs": "^1.0@alpha",
+        "drush/drush": "~9.0.0"
+    },
+    "conflict": {
+        "drupal/drupal": "*"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "autoload": {
+        "classmap": [
+            "scripts/composer/ScriptHandler.php"
+        ]
+    },
+    "scripts": {
+        "drupal-scaffold": "DrupalComposer\\DrupalScaffold\\Plugin::scaffold",
+        "pre-install-cmd": [
+            "DrupalProject\\composer\\ScriptHandler::checkComposerVersion"
+        ],
+        "pre-update-cmd": [
+            "DrupalProject\\composer\\ScriptHandler::checkComposerVersion"
+        ],
+        "post-install-cmd": [
+            "DrupalProject\\composer\\ScriptHandler::createRequiredFiles"
+        ],
+        "post-update-cmd": [
+            "DrupalProject\\composer\\ScriptHandler::createRequiredFiles"
+        ]
+    },
+    "extra": {
+        "installer-paths": {
+            "web/core": ["type:drupal-core"],
+            "web/libraries/{$name}": ["type:drupal-library"],
+            "web/modules/contrib/{$name}": ["type:drupal-module"],
+            "web/profiles/contrib/{$name}": ["type:drupal-profile"],
+            "web/themes/contrib/{$name}": ["type:drupal-theme"],
+            "drush/contrib/{$name}": ["type:drupal-drush"]
+        },
+        "composer-exit-on-patch-failure": true
+    },
+    "config": {
+        "sort-packages": true
+    }
+}

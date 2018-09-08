@@ -1,0 +1,63 @@
+{
+  "name": "beaker-theme",
+  "version": "1.1.0",
+  "description": "Amazee Labs Standard Theme",
+  "main": "gulpfile.js",
+  "devDependencies": {
+    "browser-sync": ">=2.13.0",
+    "colors": ">=1.1.2",
+    "gulp-duration": ">=0.0.0",
+    "gulp-filter": ">=4.0.0",
+    "gulp-iconfont": ">=8.0.1",
+    "gulp-imagemin": ">=2.4.0",
+    "gulp-jshint": ">=1.11.2",
+    "gulp-sourcemaps": ">=1.6.0",
+    "imagemin-gifsicle": "^5.1.0",
+    "imagemin-jpegtran": "^5.0.2",
+    "imagemin-optipng": "^5.2.1",
+    "imagemin-pngquant": ">=4.2.0",
+    "imagemin-svgo": ">=4.1.2",
+    "js-yaml": ">=3.6.1",
+    "jshint": ">=2.8.0",
+    "jshint-stylish": ">=2.0.1",
+    "pngquant-bin": ">=3.0.0",
+    "webpack-cli": "^3.1.0",
+    "webpack-serve": "^2.0.2"
+  },
+  "dependencies": {
+    "autoprefixer": ">=6.0.0",
+    "babel-core": "^6.26.3",
+    "babel-loader": "^7.1.5",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-react": "^6.24.1",
+    "breakpoint-sass": ">=2.7.0",
+    "css-mqpacker": ">=5.0.1",
+    "csswring": ">=5.1.0",
+    "gulp": ">=3.9.1",
+    "gulp-css-globbing": ">=0.1.8",
+    "gulp-postcss": ">=6.0.1",
+    "gulp-sass": ">=2.0.4",
+    "gulp-util": ">=3.0.6",
+    "react": "^16.4.2",
+    "react-dom": "^16.4.2",
+    "stream-browserify": ">=2.0.1",
+    "susy": "~2.2.5",
+    "vue": "^2.5.17",
+    "vue-loader": "^15.4.0",
+    "vue-template-compiler": "^2.5.17",
+    "webpack": "^4.17.1"
+  },
+  "scripts": {
+    "gulp": "gulp"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AmazeeLabs/d8-starter.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AmazeeLabs/d8-starter/issues"
+  },
+  "homepage": "https://github.com/AmazeeLabs/d8-starter"
+}

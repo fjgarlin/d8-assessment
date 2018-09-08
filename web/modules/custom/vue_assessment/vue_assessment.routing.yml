@@ -1,0 +1,7 @@
+vue_assessment.controller_vue_page:
+  path: 'vue'
+  defaults:
+    _controller: '\Drupal\vue_assessment\Controller\VueAssessmentController::vuePage'
+    _title: 'Vue Assessment'
+  requirements:
+    _permission: 'access content'

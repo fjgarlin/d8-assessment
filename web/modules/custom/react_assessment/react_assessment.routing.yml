@@ -1,0 +1,7 @@
+react_assessment.controller_react_page:
+  path: 'react'
+  defaults:
+    _controller: '\Drupal\react_assessment\Controller\ReactAssessmentController::reactPage'
+    _title: 'React Assessment'
+  requirements:
+    _permission: 'access content'
