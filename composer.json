@@ -1,7 +1,14 @@
 {
-    "name": "amazeeio/drupal-project",
-    "description": "Project template for Drupal 8 projects with composer hosted on amazee.io",
+    "name": "drupal-composer/drupal-project",
+    "description": "Project template for Drupal 8 projects with composer",
     "type": "project",
+    "license": "GPL-2.0-or-later",
+    "authors": [
+        {
+            "name": "",
+            "role": ""
+        }
+    ],
     "repositories": [
         {
             "type": "composer",
@@ -9,47 +16,35 @@
         }
     ],
     "require": {
-        "composer/installers": "^1.2",
-        "cweagans/composer-patches": "~1.0",
-        "drupal-composer/drupal-scaffold": "^2.2",
-        "drupal/admin_toolbar": "~1.0",
-        "drupal/config_installer": "~1.0",
-        "drupal/console": "^1.0",
-        "drupal/core": "^8.5",
-        "drupal/ctools": "~3.0",
-        "drupal/devel": "~1.2",
-        "drupal/entity_reference_revisions": "~1.0",
-        "drupal/field_group": "~1.0",
-        "drupal/graphql": "^3.0@beta",
-        "drupal/layout_plugin": "~1.0",
-        "drupal/link_css": "~1.0",
-        "drupal/metatag": ">1.0-beta10",
-        "drupal/npm": "^1.0@alpha",
-        "drupal/page_manager": "~1.0",
-        "drupal/paragraphs": "~1.0",
-        "drupal/pathauto": "~1.0",
-        "drupal/redirect": "~1.0",
-        "drupal/redis": "^1.0",
-        "drupal/token": "~1.0",
-        "drupal/varnish": "dev-amazee",
-        "drupal/webpack": "^1.0@alpha",
-        "drupal/webpack_babel": "^1.0@alpha",
-        "drupal/webpack_react": "^1.0@alpha",
-        "drupal/webpack_vuejs": "^1.0@alpha",
-        "drush/drush": "~9.0.0"
+        "ext-json": "*",
+        "amazeelabs/silverback": "dev-master",
+        "drupal-composer/drupal-scaffold": "^2.5",
+        "drupal/metatag": "^1.7",
+        "drupal/polyfill": "^1.1",
+        "drupal/webpack_babel": "^1.0",
+        "drupal/webpack_react": "^1.0",
+        "drupal/webpack_vuejs": "^1.0"
+    },
+    "require-dev": {
+        "webflo/drupal-core-require-dev": "^8.6.0"
     },
     "conflict": {
         "drupal/drupal": "*"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
+    "config": {
+        "sort-packages": true
+    },
     "autoload": {
         "classmap": [
             "scripts/composer/ScriptHandler.php"
+        ],
+        "files": [
+            "load.environment.php"
         ]
     },
     "scripts": {
-        "drupal-scaffold": "DrupalComposer\\DrupalScaffold\\Plugin::scaffold",
         "pre-install-cmd": [
             "DrupalProject\\composer\\ScriptHandler::checkComposerVersion"
         ],
@@ -61,31 +56,49 @@
         ],
         "post-update-cmd": [
             "DrupalProject\\composer\\ScriptHandler::createRequiredFiles"
+        ],
+        "run-tests": [
+            "if [[ -d web/modules/custom ]]; then phpunit web/modules/custom; fi",
+            "cd tests && npm install && CYPRESS_TAGS=@COMPLETED cypress run"
         ]
     },
     "extra": {
-        "installer-paths": {
-            "web/core": ["type:drupal-core"],
-            "web/libraries/{$name}": ["type:drupal-library"],
-            "web/modules/contrib/{$name}": ["type:drupal-module"],
-            "web/profiles/contrib/{$name}": ["type:drupal-profile"],
-            "web/themes/contrib/{$name}": ["type:drupal-theme"],
-            "drush/contrib/{$name}": ["type:drupal-drush"]
+        "patchLevel": {
+            "drupal/core": "-p2"
         },
-        "composer-exit-on-patch-failure": true,
-        "patches": {
-            "drupal/npm": {
-                "Comment out throw error": "patches/npm/comment-out-throw-error.patch"
+        "installer-paths": {
+            "web/core": [
+                "type:drupal-core"
+            ],
+            "web/libraries/{$name}": [
+                "type:drupal-library"
+            ],
+            "web/modules/contrib/{$name}": [
+                "type:drupal-module"
+            ],
+            "web/profiles/contrib/{$name}": [
+                "type:drupal-profile"
+            ],
+            "web/themes/contrib/{$name}": [
+                "type:drupal-theme"
+            ],
+            "drush/Commands/{$name}": [
+                "type:drupal-drush"
+            ]
+        },
+        "patches": [],
+        "drupal-scaffold": {
+            "initial": {
+                ".editorconfig": "../.editorconfig",
+                ".gitattributes": "../.gitattributes"
             }
         },
-        "drupal-scaffold": {
-            "excludes": [
-                "sites/development.services.yml",
-                "sites/example.settings.local.php"
-            ]
+        "enable-patching": true,
+        "merge-plugin": {
+            "include": [
+                "packages/composer.json"
+            ],
+            "replace": true
         }
-    },
-    "config": {
-        "sort-packages": true
     }
 }

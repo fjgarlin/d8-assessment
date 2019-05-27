@@ -1,0 +1,4 @@
+name: drupal-example
+recipe: drupal8
+config:
+  webroot: web

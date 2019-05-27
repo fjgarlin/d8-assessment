@@ -20,17 +20,13 @@ x-environment:
     # Uncomment to enable xdebug and then restart via `docker-compose up -d`
     #XDEBUG_ENABLE: "true"
 
-x-user:
-  &default-user
-    # The default user under which the containers should run. Change this if you are on linux and run with another user than id `1000`
-    user: '1000'
 
 services:
 
   cli: # cli container, will be used for executing composer and any local commands (drush, drupal, etc.)
     build:
       context: .
-      dockerfile: Dockerfile.cli
+      dockerfile: lagoon/Dockerfile.cli
     image: *lagoon-project # this image will be reused as `CLI_IMAGE` in subsequent Docker builds
     labels:
       # Lagoon Labels
@@ -38,28 +34,43 @@ services:
       lagoon.persistent.name: nginx # mount the persistent storage of nginx into this container
       lagoon.persistent: /app/web/sites/default/files/ # location where the persistent storage should be mounted
     << : *default-volumes # loads the defined volumes from the top
-    user: root
     volumes_from: # mount the ssh-agent from the pygmy or cachalot ssh-agent
       - container:amazeeio-ssh-agent
     environment:
       << : *default-environment # loads the defined environment variables from the top
+    ports:
+    - "1234" # exposes the port 1234 with a random local port, find it with `docker-compose port cli 1234`
+    extra_hosts:
+    - "drupal-example.docker.amazee.io:172.17.0.1"
 
   nginx:
     build:
       context: .
-      dockerfile: Dockerfile.nginx
+      dockerfile: lagoon/Dockerfile.nginx
       args:
         CLI_IMAGE: *lagoon-project # Inject the name of the cli image
     labels:
       lagoon.type: nginx-php-persistent
       lagoon.persistent: /app/web/sites/default/files/ # define where the persistent storage should be mounted too
     << : *default-volumes # loads the defined volumes from the top
-    << : *default-user # uses the defined user from top
     depends_on:
       - cli # basically just tells docker-compose to build the cli first
     environment:
       << : *default-environment # loads the defined environment variables from the top
-      LAGOON_LOCALDEV_URL: nginx-drupal-example.docker.amazee.io # generate another route for nginx, by default we go to varnish
+      LAGOON_LOCALDEV_URL: nginx.drupal-example.docker.amazee.io # generate another route for nginx, by default we go to varnish
+    networks:
+      - amazeeio-network
+      - default
+
+  storybook:
+    build:
+      context: .
+      dockerfile: lagoon/Dockerfile.storybook
+    labels:
+      lagoon.type: nginx
+    environment:
+      <<: *default-environment # loads the defined environment variables from the top
+      LAGOON_LOCALDEV_URL: storybook.drupal-example.docker.amazee.io # generate another route for storybook
     networks:
       - amazeeio-network
       - default
@@ -67,7 +78,7 @@ services:
   php:
     build:
       context: .
-      dockerfile: Dockerfile.php
+      dockerfile: lagoon/Dockerfile.php
       args:
         CLI_IMAGE: *lagoon-project
     labels:
@@ -75,7 +86,6 @@ services:
       lagoon.name: nginx # we want this service be part of the nginx pod in Lagoon
       lagoon.persistent: /app/web/sites/default/files/ # define where the persistent storage should be mounted too
     << : *default-volumes # loads the defined volumes from the top
-    << : *default-user # uses the defined user from top
     depends_on:
       - cli # basically just tells docker-compose to build the cli first
     environment:
@@ -88,28 +98,26 @@ services:
       lagoon.type: mariadb
     ports:
       - "3306" # exposes the port 3306 with a random local port, find it with `docker-compose port mariadb 3306`
-    << : *default-user # uses the defined user from top
     environment:
       << : *default-environment
 
-  redis:
-    image: amazeeio/redis
-    labels:
-      lagoon.type: redis
-    << : *default-user # uses the defined user from top
-    environment:
-      << : *default-environment
+  ## Uncomment for Redis
+  # redis:
+  #   image: amazeeio/redis
+  #   labels:
+  #     lagoon.type: redis
+  #   environment:
+  #     << : *default-environment
 
-#  solr:
-#    image: amazeeio/solr:6.6-drupal
-#    labels:
-#      lagoon.type: solr
-#    << : *default-user # uses the defined user from top
-#    ports:
-#      - "8983" # exposes the port 8983 with a random local port, find it with `docker-compose port solr 8983`
-#    environment:
-#      << : *default-environment
-
+  ## Uncomment for Solr
+  # solr:
+  #   image: amazeeio/solr:6.6-drupal
+  #   labels:
+  #     lagoon.type: solr
+  #   ports:
+  #     - "8983" # exposes the port 8983 with a random local port, find it with `docker-compose port solr 8983`
+  #   environment:
+  #     << : *default-environment
 
   varnish:
     image: amazeeio/varnish-drupal
@@ -117,7 +125,6 @@ services:
       lagoon.type: varnish
     links:
       - nginx # links varnish to the nginx in this docker-compose project, or it would try to connect to any nginx running in docker
-    << : *default-user # uses the defined user from top
     environment:
       << : *default-environment
       VARNISH_BYPASS: "true" # by default we bypass varnish, change to 'false' or remove in order to tell varnish to cache if possible

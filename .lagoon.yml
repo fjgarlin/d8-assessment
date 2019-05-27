@@ -1,11 +1,13 @@
 docker-compose-yaml: docker-compose.yml
 
+project: drupal-example
+
 tasks:
-  pre-rollout:
-    - run:
-        name: drush backup
-        command: drush -y ard --destination=/app/sites/default/files/private/pre-deploy.tar.gz
-        service: cli
+#   pre-rollout:
+#     - run:
+#         name: drush sql-dump
+#         command: mkdir -p /app/web/sites/default/files/private/ && drush sql-dump --ordered-dump --gzip --result-file=/app/web/sites/default/files/private/pre-deploy-dump.sql.gz || true
+#         service: cli
 
   post-rollout:
     - run:
@@ -15,7 +17,7 @@ tasks:
     - run:
         name: IF no Drupal installed drush si with no email sending
         command: |
-            if [[ $(drush core-status bootstrap --pipe) == "" ]]; then
+            if ! drush status --fields=bootstrap | grep -q "Successful"; then
                 # no drupal installed, we install drupal from scratch
                 drush si config_installer -y --account-name=admin --account-pass=admin install_configure_form.enable_update_status_module=NULL install_configure_form.enable_update_status_emails=NULL
             fi
@@ -24,6 +26,14 @@ tasks:
     - run:
         name: drush cim
         command: drush -y cim
+        service: cli
+    - run:
+        name: drush updb
+        command: drush -y updb
+        service: cli
+    - run:
+        name: drush webpack:build
+        command: if drush | grep -q "webpack:build"; then drush webpack:build; fi
         service: cli
     - run:
         name: drush cr
