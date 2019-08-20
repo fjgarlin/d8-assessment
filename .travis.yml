@@ -9,9 +9,14 @@ node_js:
 
 cache:
   directories:
-  - ~/.npm
-  - ~/.cache
-  - ~/.composer/cache
+    - ~/.npm
+    - ~/.cache
+    - ~/.composer/cache
+
+addons:
+  apt:
+    packages:
+      - libgconf-2-4
 
 before_install:
   - echo 'sendmail_path = /bin/true' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
@@ -20,29 +25,21 @@ before_install:
 
 install:
   - composer install
-  - cd tests && npm install && cd ..
+  - yarn install
   - source .envrc
 
 script:
   - silverback setup
-  - if [[ -n "$SB_JIRA_PROJECTS" ]]; then silverback download-tests; fi
-  - drush serve > log.txt 2>&1 &
-  - until netstat -an 2>/dev/null | grep '8888.*LISTEN'; sleep 1; curl -I http://127.0.0.1:8888 ; do true; done
-  - if [[ -d web/modules/custom ]]; then phpunit web/modules/custom; fi
+  - drush serve :8889 > log.txt 2>&1 &
+  # Wait for drush serve to start up, but only for 20 seconds.
   - |
-    cd tests
-    # The regex to get jira issue number from a git branch.
-    regex='(.*)(^|/)([A-Z]+[A-Z0-9]?-[0-9]+)(.*)'
-    # Get git branch.
-    branch="${TRAVIS_PULL_REQUEST_BRANCH:-$TRAVIS_BRANCH}"
-    # Get the jira issue number from branch name and add it to cypress tags. Or
-    # run only completed tests.
-    [[ $branch =~ $regex ]] && \
-      export CYPRESS_TAGS="@${BASH_REMATCH[3]} or @COMPLETED" || \
-      export CYPRESS_TAGS="@COMPLETED"
-    echo "Going to run cypress with the following tags: $CYPRESS_TAGS"
-    cypress run
-  - kill $(jobs -p) || true
+    DRUSH_SERVE_WAIT=0; \
+    until curl -sS http://127.0.0.1:8889 >/dev/null || (($DRUSH_SERVE_WAIT > 19)); \
+    do sleep 1 && \
+      DRUSH_SERVE_WAIT=$(($DRUSH_SERVE_WAIT + 1)) && \
+      echo "Waited $DRUSH_SERVE_WAIT seconds for drush serve."; \
+    done
+  - composer run-script run-tests --timeout 0
 
 notifications:
   email: false

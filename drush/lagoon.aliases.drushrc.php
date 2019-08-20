@@ -1,8 +1,13 @@
 <?php
-// Don't change anything here, it's magic!
 
-global $aliases_stub;
-if (empty($aliases_stub)) {
+/**
+ * @file
+ * Don't change anything here, it's magic!
+ */
+
+if (getenv('LAGOON')) {
+  global $aliases_stub;
+  if (empty($aliases_stub)) {
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_AUTOREFERER, TRUE);
     curl_setopt($ch, CURLOPT_HEADER, 0);
@@ -11,5 +16,6 @@ if (empty($aliases_stub)) {
     curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
     $aliases_stub = curl_exec($ch);
     curl_close($ch);
+  }
+  eval($aliases_stub);
 }
-eval($aliases_stub);

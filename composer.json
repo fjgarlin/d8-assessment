@@ -58,8 +58,8 @@
             "DrupalProject\\composer\\ScriptHandler::createRequiredFiles"
         ],
         "run-tests": [
-            "if [[ -d web/modules/custom ]]; then phpunit web/modules/custom; fi",
-            "cd tests && npm install && CYPRESS_TAGS=@COMPLETED cypress run"
+            "if [ -d web/modules/custom ]; then phpunit web/modules/custom; fi",
+            "yarn install && CYPRESS_TAGS=@COMPLETED cypress run"
         ]
     },
     "extra": {
@@ -99,6 +99,7 @@
                 "packages/composer.json"
             ],
             "replace": true
-        }
+        },
+        "composer-exit-on-patch-failure": true
     }
 }
