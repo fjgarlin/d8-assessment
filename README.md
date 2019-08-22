@@ -45,7 +45,7 @@ Which one to use? `Docker with Lagoon` is the most reliable way to develop. `Loc
   - Install a minimal database  
   `drush si -y minimal --sites-subdir=default --config-dir=../config/sync --account-name=admin --account-pass=admin`
   - Build webpack libraries  
-  `yarn install --pure-lockfile && yarn run build-library && yarn run build-storybook && drush webpack:build`
+  `drush webpack:build`
 
 ### Local PHP server
 
