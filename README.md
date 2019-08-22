@@ -25,13 +25,10 @@ Which one to use? `Docker with Lagoon` is the most reliable way to develop. `Loc
 ### Docker with Lagoon
 
 - Prerequisites
-  - Make sure you have [PHP7](http://php.net/manual/en/install.php) installed  
-  `php --version`
-  - Make sure you have [Composer](https://getcomposer.org/) installed  
-  `composer --version`
+  - Make sure you have [Docker](http://docker.com) installed
+  - Make sure you have [Pygmy](https://pygmy.readthedocs.io/en) installed  
+  `pygmy --version`
 - Setup
-  - Install dependencies  
-  `composer install`
   - Start [Docker](https://www.docker.com)
   - Start [Pygmy](https://docs.amazee.io/local_docker_development/pygmy.html)  
   `pygmy up`
@@ -67,9 +64,16 @@ Which one to use? `Docker with Lagoon` is the most reliable way to develop. `Loc
   `php --version`
   - Make sure you have [Composer](https://getcomposer.org/) installed  
   `composer --version`
+  - Make sure you have [Node.js](https://nodejs.org/en/) installed  
+  `node --version`
+  - Make sure you have [Yarn](https://yarnpkg.com/en/) installed  
+  `yarn --version`
 - Setup
-  - Install dependencies  
-  `composer install`
+  - Install dependencies for PHP and Javascript:  
+  `composer install`  
+  `yarn install --pure-lockfile`
+  - Build Javascript dependencies/theme:  
+  `yarn run build-library && yarn run build-storybook`
   - When switching to the project root for the first time, you should see this:  
   ``direnv: error .envrc is blocked. Run `direnv allow` to approve its content.``
   - Run `direnv allow` (it will copy `.env.example` to `.env`, and load env vars)
